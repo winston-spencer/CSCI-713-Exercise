@@ -203,4 +203,25 @@ class StudentServiceTest {
         // Assert
         assertEquals(expectedAverageGpa, service.calculateAverageGpa(), expectedDelta);
     }
+
+    @Test
+    void testGetTopStudentWithEqualGpas() {
+        // Arrange
+        double sameGpa = 3.5;
+        double expectedDelta = 0.001;
+        Student s1 = StudentArb.generateWithGpa(sameGpa);
+        Student s2 = StudentArb.generateWithGpa(sameGpa); // Same GPA as s1
+        Student s3 = StudentArb.generateWithGpa(3.2);     // Lower GPA
+        service.addStudent(s1);
+        service.addStudent(s2);
+        service.addStudent(s3);
+
+        // Act
+        Student top = service.getTopStudent();
+
+        // Assert - Should return the first student with the highest GPA
+        // This tests the boundary condition where s.getGpa() > top.getGpa() vs >=
+        assertEquals(s1.getName(), top.getName(), "Should return first student when GPAs are equal");
+        assertEquals(sameGpa, top.getGpa(), expectedDelta);
+    }
 }
