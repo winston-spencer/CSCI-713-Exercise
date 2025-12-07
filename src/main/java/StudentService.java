@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class StudentService {
@@ -16,7 +17,7 @@ public class StudentService {
     public Student getTopStudent() {
         Student top = students.get(0);  // Potential IndexOutOfBoundsException
         for (Student s : students) {
-            if (s.getGpa() < top.getGpa()) {
+            if (s.getGpa() > top.getGpa()) {
                 top = s;
             }
         }
@@ -37,10 +38,21 @@ public class StudentService {
     }
 
     // Unused method (code smell)
-    public void removeStudentByName(String name) {
-        for (Student s : students) {
+    // public void removeStudentByName(String name) {
+    //     for (Student s : students) {
+    //         if (s.getName().equals(name)) {
+    //             students.remove(s);  // Bug: ConcurrentModificationException possible
+    //         }
+    //     }
+    // }
+
+    // With the fix ConcurrentModificationException applied
+   public void removeStudentByName(String name) {
+        Iterator<Student> iterator = students.iterator();
+        while (iterator.hasNext()) {
+            Student s = iterator.next();
             if (s.getName().equals(name)) {
-                students.remove(s);  // Bug: ConcurrentModificationException possible
+                iterator.remove();
             }
         }
     }
