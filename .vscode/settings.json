@@ -1,12 +1,27 @@
 {
-    "java.home": "C:/Program Files/Zulu/zulu-17",
-    "java.configuration.runtimes": [
-        {
-            "name": "JavaSE-17",
-            "path": "C:/Program Files/Zulu/zulu-17",
-            "default": true
-        }
-    ],
     "java.compile.nullAnalysis.mode": "automatic",
-    "java.configuration.updateBuildConfiguration": "interactive"
+    "java.configuration.updateBuildConfiguration": "interactive",
+    
+    // Platform-specific settings
+    "[windows]": {
+        "java.home": "C:/Program Files/Zulu/zulu-17",
+        "java.configuration.runtimes": [
+            {
+                "name": "JavaSE-17",
+                "path": "C:/Program Files/Zulu/zulu-17",
+                "default": true
+            }
+        ]
+    },
+    
+    "[linux]": {
+        "java.home": "/usr/lib/jvm/zulu-17",
+        "java.configuration.runtimes": [
+            {
+                "name": "JavaSE-17",
+                "path": "/usr/lib/jvm/zulu-17",
+                "default": true
+            }
+        ]
+    }
 }
