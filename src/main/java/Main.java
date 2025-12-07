@@ -10,6 +10,7 @@ public class Main {
         service.addStudent(s1);
         service.addStudent(s2);
         service.addStudent(s3);
+        service.removeStudentByName(s1.getName());
 
         // Bug: Will crash if students list is empty
         System.out.println("Top Student: " + service.getTopStudent().getName());
