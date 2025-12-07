@@ -1,9 +1,11 @@
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 public class StudentService {
-    private List<Student> students;
+
+    private final List<Student> students;
 
     public StudentService() {
         students = new ArrayList<>();
@@ -37,7 +39,7 @@ public class StudentService {
         }
     }
 
-    // Unused method (code smell)
+    // //Unused method (code smell)
     // public void removeStudentByName(String name) {
     //     for (Student s : students) {
     //         if (s.getName().equals(name)) {
@@ -46,8 +48,9 @@ public class StudentService {
     //     }
     // }
 
+    
     // With the fix ConcurrentModificationException applied
-   public void removeStudentByName(String name) {
+    public void removeStudentByName(String name) {
         Iterator<Student> iterator = students.iterator();
         while (iterator.hasNext()) {
             Student s = iterator.next();

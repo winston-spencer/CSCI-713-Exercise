@@ -1,34 +1,206 @@
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class StudentServiceTest {
 
-    @Test
-    void testAddStudentAndTopStudent() {
-        StudentService service = new StudentService();
-        Student s1 = new Student("Alice", 20, 3.5);
-        Student s2 = new Student("Bob", 22, 3.9);
+    private StudentService service;
 
+    @SuppressWarnings("unused")
+    @BeforeEach
+    void setUp() {
+        service = new StudentService();
+    }
+
+    @RepeatedTest(10)
+    void testAddStudent() {
+        // Arrange
+        Student student = StudentArb.generate();
+        double expectedAverageGpa = student.getGpa();
+        double expectedDelta = 0.001;
+
+        // Act
+        service.addStudent(student);
+
+        // Assert
+        assertEquals(expectedAverageGpa, service.calculateAverageGpa(), expectedDelta);
+    }
+
+    @RepeatedTest(10)
+    void testGetTopStudent() {
+        // Arrange
+        double topGpa = 3.9;
+        double expectedDelta = 0.001;
+        Student s1 = StudentArb.generateWithGpa(3.5);
+        Student s2 = StudentArb.generateWithGpa(topGpa);
+        Student s3 = StudentArb.generateWithGpa(3.2);
         service.addStudent(s1);
         service.addStudent(s2);
+        service.addStudent(s3);
 
-        // Test if top student is correctly identified
+        // Act
         Student top = service.getTopStudent();
-        assertEquals("Bob", top.getName());
+
+        // Assert
+        assertEquals(s2.getName(), top.getName());
+        assertEquals(topGpa, top.getGpa(), expectedDelta);
     }
 
     @Test
-    void testCalculateAverageGpa() {
-        StudentService service = new StudentService();
-        service.addStudent(new Student("Alice", 20, 3.5));
-        service.addStudent(new Student("Bob", 22, 3.5));
+    void testGetTopStudentEmptyList() {
+        // Arrange
+        // Empty service
 
-        double avg = service.calculateAverageGpa();
-        assertEquals(3.5, avg, 0.001);
+        // Act & Assert
+        IndexOutOfBoundsException exception = assertThrows(IndexOutOfBoundsException.class, () -> {
+            service.getTopStudent();
+        });
+
+        // Verify the exception was actually thrown
+        assertEquals(IndexOutOfBoundsException.class, exception.getClass());
     }
 
-    // Intentionally leave out tests for:
-    // - removeStudentByName
-    // - behavior with empty student list
-    // - Utils methods
+    @RepeatedTest(10)
+    void testGetTopStudentSingleStudent() {
+        // Arrange
+        double expectedDelta = 0.001;
+        Student student = StudentArb.generate();
+        service.addStudent(student);
+
+        // Act
+        Student top = service.getTopStudent();
+
+        // Assert
+        assertEquals(student.getName(), top.getName());
+        assertEquals(student.getGpa(), top.getGpa(), expectedDelta);
+    }
+
+    @RepeatedTest(10)
+    void testCalculateAverageGpa() {
+        // Arrange
+        int listSize = StudentArb.random.nextInt(6) + 5; // Random size between 5 and 10
+        double expectedDelta = 0.001;
+        double totalGpa = 0.0;
+
+        for (int i = 0; i < listSize; i++) {
+            Student student = StudentArb.generate();
+            service.addStudent(student);
+            totalGpa += student.getGpa();
+        }
+
+        double expectedAverageGpa = totalGpa / listSize;
+
+        // Act
+        double avg = service.calculateAverageGpa();
+
+        // Assert
+        assertEquals(expectedAverageGpa, avg, expectedDelta);
+    }
+
+    @RepeatedTest(10)
+    void testCalculateAverageGpaDifferentGpas() {
+        // Arrange
+        int listSize = StudentArb.random.nextInt(6) + 5; // Random size between 5 and 10
+        double expectedDelta = 0.001;
+        double totalGpa = 0.0;
+
+        for (int i = 0; i < listSize; i++) {
+            Student student = StudentArb.generate();
+            service.addStudent(student);
+            totalGpa += student.getGpa();
+        }
+
+        double expectedAverageGpa = totalGpa / listSize;
+
+        // Act
+        double avg = service.calculateAverageGpa();
+
+        // Assert
+        assertEquals(expectedAverageGpa, avg, expectedDelta);
+    }
+
+    @Test
+    void testCalculateAverageGpaEmptyList() {
+        // Arrange
+        // Empty service
+        double expectedAverageGpa = 0.0;
+        double expectedDelta = 0.001;
+
+        // Act
+        double avg = service.calculateAverageGpa();
+
+        // Assert
+        assertEquals(expectedAverageGpa, avg, expectedDelta);
+    }
+
+    @Test
+    void testRemoveStudentByName() {
+        // Arrange
+        int listSize = StudentArb.random.nextInt(6) + 5; // Random size between 5 and 10
+        double expectedDelta = 0.001;
+        Student[] students = new Student[listSize];
+        double totalGpaBeforeRemoval = 0.0;
+
+        for (int i = 0; i < listSize; i++) {
+            students[i] = StudentArb.generate();
+            service.addStudent(students[i]);
+            totalGpaBeforeRemoval += students[i].getGpa();
+        }
+
+        // Select a random student to remove
+        int removeIndex = StudentArb.random.nextInt(listSize);
+        Student studentToRemove = students[removeIndex];
+        String nameToRemove = studentToRemove.getName();
+
+        // Calculate expected GPA after removal
+        double totalGpaAfterRemoval = totalGpaBeforeRemoval - studentToRemove.getGpa();
+        double expectedAverageGpa = totalGpaAfterRemoval / (listSize - 1);
+
+        // Act
+        service.removeStudentByName(nameToRemove);
+
+        // Assert
+        assertEquals(expectedAverageGpa, service.calculateAverageGpa(), expectedDelta);
+    }
+
+    @Test
+    void testRemoveStudentByNameNotFound() {
+        // Arrange
+        int listSize = StudentArb.random.nextInt(6) + 5; // Random size between 5 and 10
+        double expectedDelta = 0.001;
+        double totalGpa = 0.0;
+
+        for (int i = 0; i < listSize; i++) {
+            Student student = StudentArb.generate();
+            service.addStudent(student);
+            totalGpa += student.getGpa();
+        }
+
+        double expectedAverageGpa = totalGpa / listSize;
+        String nonExistentName = "NonExistentStudent";
+
+        // Act
+        service.removeStudentByName(nonExistentName);
+
+        // Assert
+        assertEquals(expectedAverageGpa, service.calculateAverageGpa(), expectedDelta);
+    }
+
+    @Test
+    void testRemoveStudentByNameEmptyList() {
+        // Arrange
+        // Empty service
+        double expectedAverageGpa = 0.0;
+        double expectedDelta = 0.001;
+        String nameToRemove = "Alice";
+
+        // Act
+        service.removeStudentByName(nameToRemove);
+
+        // Assert
+        assertEquals(expectedAverageGpa, service.calculateAverageGpa(), expectedDelta);
+    }
 }
