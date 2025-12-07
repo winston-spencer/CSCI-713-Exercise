@@ -11,25 +11,17 @@
 
 ## JaCoCo Code Coverage Reports
 
-### Line Coverage Screenshots
-- ![Student Class Line Coverage](screenshot/jacoco-student-line-coverage.png)
-- ![StudentService Class Line Coverage](screenshot/jacoco-studentservice-line-coverage.png)
-- ![Utils Class Line Coverage](screenshot/jacoco-utils-line-coverage.png)
-- ![Main Class Line Coverage](screenshot/jacoco-main-line-coverage.png)
+Below is the JaCoCo line and branch coverage report for each class:
 
-### Branch Coverage Screenshots
-- ![Student Class Branch Coverage](screenshot/jacoco-student-branch-coverage.png)
-- ![StudentService Class Branch Coverage](screenshot/jacoco-studentservice-branch-coverage.png)
-- ![Utils Class Branch Coverage](screenshot/jacoco-utils-branch-coverage.png)
-- ![Main Class Branch Coverage](screenshot/jacoco-main-branch-coverage.png)
+![Alt text](screenshots/JacocoReport.png?raw=true "JaCoCo Report")
 
 ## PIT Mutation Testing Reports
 
-### Mutation Coverage Screenshots
-- ![Student Class Mutation Coverage](screenshot/pit-student-mutation-coverage.png)
-- ![StudentService Class Mutation Coverage](screenshot/pit-studentservice-mutation-coverage.png)
-- ![Utils Class Mutation Coverage](screenshot/pit-utils-mutation-coverage.png)
-- ![Main Class Mutation Coverage](screenshot/pit-main-mutation-coverage.png)
+Below is the PIT Mutationreport for each class:
+
+
+![Alt text](screenshots/JacocoReport.png?raw=true "PIT Mutation Report")
+
 
 ## Summary
 
