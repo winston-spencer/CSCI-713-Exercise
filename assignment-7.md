@@ -20,7 +20,7 @@ Below is the JaCoCo line and branch coverage report for each class:
 Below is the PIT Mutationreport for each class:
 
 
-![Alt text](screenshots/JacocoReport.png?raw=true "PIT Mutation Report")
+![Alt text](screenshots/PitTestCoverageReport.png?raw=true "PIT Mutation Report")
 
 
 ## Summary
